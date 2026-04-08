@@ -54,11 +54,10 @@ export default function HomePage() {
     if (rating === 0) return setFormError('Selecione uma nota.')
     if (!comment.trim()) return setFormError('Escreva um comentário.')
     setSubmitting(true)
-    const { error } = await supabase.from('reviews').insert([{ name: name.trim(), rating, comment: comment.trim(), approved: true }])
+    const { error } = await supabase.from('reviews').insert([{ name: name.trim(), rating, comment: comment.trim(), approved: false }])
     setSubmitting(false)
     if (error) return setFormError('Erro ao enviar. Tente novamente.')
     setSubmitted(true); setName(''); setRating(0); setComment('')
-    loadReviews()
   }
 
   const avg = reviews.length > 0 ? reviews.reduce((a,r) => a+r.rating, 0)/reviews.length : 0
@@ -284,7 +283,7 @@ export default function HomePage() {
                 <div className="text-center py-12">
                   <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center text-4xl mx-auto mb-4">✅</div>
                   <p className="font-bold text-gray-800 text-lg">Obrigado pela avaliação!</p>
-                  <p className="text-gray-400 text-sm mt-1 mb-6">Já está visível para todos!</p>
+                  <p className="text-gray-400 text-sm mt-1 mb-6">Será exibida após aprovação da loja.</p>
                   <button onClick={() => setSubmitted(false)} className="text-sm text-[#2d3a1a] font-semibold underline underline-offset-2">Enviar outra avaliação</button>
                 </div>
               ) : (
